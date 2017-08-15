@@ -13,7 +13,7 @@ public class Main {
     public Double temp;
     @SerializedName("pressure")
     @Expose
-    public Long pressure;
+    public Double pressure;
     @SerializedName("humidity")
     @Expose
     public Long humidity;
