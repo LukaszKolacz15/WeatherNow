@@ -21,9 +21,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -104,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (swipeRefresh != null && !swipeRefresh.isRefreshing()) {
             swipeRefresh.setRefreshing(true);
         }
+
+        CameraUpdate update = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),location.getLongitude()));
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+        googleMaps.moveCamera(update);
+        googleMaps.animateCamera(zoom);
+
         WeatherNowApp.weatherApi.getWeather(WeatherNowApp.API_KEY, location.getLatitude(), location.getLongitude()).enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
@@ -115,10 +124,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if (response.body() != null) {
                         if (response.body().weather != null && response.body().weather.size() > 0) {
                             Weather weather = response.body().weather.get(0);
-//                            Clouds clouds = response.body().clouds.get(0);
                             if (textView != null) {
-                                textView.setText("Current weather is: " + weather.description + " " + weather.id);
-//                                textView2.setText("Clouds: " + clouds.all);
+                                textView.setText("Current weather is: " + weather.description);
                             }
                             if (imageView != null) {
                                 Picasso.with(MainActivity.this).load("http://openweathermap.org/img/w/" + weather.icon + ".png").into(imageView);

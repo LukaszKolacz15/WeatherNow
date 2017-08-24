@@ -31,8 +31,6 @@ public class WeatherResponse {
     @SerializedName("clouds")
     @Expose
     public Clouds clouds;
-//    public List<Clouds> clouds = null;
-
     @SerializedName("dt")
     @Expose
     public Long dt;
